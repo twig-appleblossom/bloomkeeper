@@ -631,6 +631,11 @@ document.addEventListener("click", (event) => {
     return;
   }
 
+  if (action === "dismiss") {
+    dismissSeed(seed);
+    return;
+  }
+
   if (action === "replace") {
     replaceSeed(seed);
     return;
@@ -722,6 +727,40 @@ openJourneyLogButton.addEventListener("click", () => {
 backToCottageButton.addEventListener("click", () => {
   showCottage();
 });
+
+function dismissSeed(seed) {
+  if (
+    currentDaySaved ||
+    seed.source !== "suggested" ||
+    seed.status !== "available"
+  ) {
+    return;
+  }
+
+  todaySeeds = todaySeeds.filter((item) => item.id !== seed.id);
+
+  ensureOnePrimarySeed();
+  renderTodaysPath();
+
+  narratorText.innerText =
+    "That path has been gently set aside. There is no need to tend every seed.";
+
+  saveGame();
+}
+
+function ensureOnePrimarySeed() {
+  if (todaySeeds.length === 0) {
+    return;
+  }
+
+  const currentPrimary = todaySeeds.find((seed) => seed.isPrimary);
+
+  if (currentPrimary) {
+    return;
+  }
+
+  todaySeeds[0].isPrimary = true;
+}
 
 function replaceSeed(seed) {
   if (
@@ -838,26 +877,35 @@ function createSeedCard(seed) {
           `;
   } else if (seed.status === "available") {
     actions = `
-      <div class="seed-actions">
-        <button
-          type="button"
-          class="seed-action-button"
-          data-action="accept"
-          data-seed-id="${seed.id}"
-        >
-          Accept Seed
-        </button>
+  <div class="seed-actions">
+    <button
+      type="button"
+      class="seed-action-button"
+      data-action="accept"
+      data-seed-id="${seed.id}"
+    >
+      Accept Seed
+    </button>
 
-        <button
-          type="button"
-          class="seed-action-button quiet-button"
-          data-action="replace"
-          data-seed-id="${seed.id}"
-        >
-          Try Another
-        </button>
-      </div>
-    `;
+    <button
+      type="button"
+      class="seed-action-button quiet-button"
+      data-action="replace"
+      data-seed-id="${seed.id}"
+    >
+      Try Another
+    </button>
+
+    <button
+      type="button"
+      class="seed-action-button quiet-button"
+      data-action="dismiss"
+      data-seed-id="${seed.id}"
+    >
+      Let This Seed Go
+    </button>
+  </div>
+`;
   } else if (seed.status === "accepted") {
     actions = `
       <p class="seed-status">
