@@ -127,6 +127,16 @@ saveOneOffButton.addEventListener("click", () => {
 });
 
 // -----------------------------
+// COMPLETE TODAY ITEM
+// -----------------------------
+
+function completeTodayItem(itemId) {
+  todayItems = todayItems.filter((item) => item.id !== itemId);
+
+  renderToday();
+}
+
+// -----------------------------
 // RENDER TODAY
 // -----------------------------
 
@@ -154,6 +164,10 @@ function renderToday() {
 
     card.className = "today-item";
 
+    const title = document.createElement("span");
+
+    title.className = "today-item-title";
+
     if (item.type === "seed") {
       const seed = seeds.find((seed) => seed.id === item.seedId);
 
@@ -161,12 +175,24 @@ function renderToday() {
         return;
       }
 
-      card.textContent = seed.title;
+      title.textContent = seed.title;
     }
 
     if (item.type === "oneoff") {
-      card.textContent = `📌 ${item.title}`;
+      title.textContent = `📌 ${item.title}`;
     }
+
+    const completeButton = document.createElement("button");
+
+    completeButton.className = "complete-button";
+    completeButton.textContent = "✓";
+
+    completeButton.addEventListener("click", () => {
+      completeTodayItem(item.id);
+    });
+
+    card.appendChild(title);
+    card.appendChild(completeButton);
 
     todayList.appendChild(card);
   });

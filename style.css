@@ -78,12 +78,42 @@ h1 {
 }
 
 .today-item {
-  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 16px 18px;
 
   background: white;
   border-radius: 18px;
 
   box-shadow: 0 2px 8px rgba(60, 40, 70, 0.06);
+}
+
+.today-item-title {
+  line-height: 1.4;
+}
+
+.complete-button {
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #e5efe3;
+  color: #4e6850;
+
+  font-size: 1.1rem;
+
+  cursor: pointer;
+}
+
+.complete-button:hover {
+  background: #d8e8d5;
 }
 
 /* SEED BANK */
