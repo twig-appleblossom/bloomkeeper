@@ -22,8 +22,22 @@
           <!-- JavaScript will put today's Seeds here -->
         </div>
 
+        <div id="one-off-form" class="one-off-form hidden">
+          <label for="one-off-input"> What needs doing? </label>
+
+          <input id="one-off-input" type="text" placeholder="Buy eyeliner..." />
+
+          <div class="one-off-actions">
+            <button id="cancel-one-off" class="secondary-button">Cancel</button>
+
+            <button id="save-one-off" class="primary-button">
+              Add to Today
+            </button>
+          </div>
+        </div>
+
         <div class="actions">
-          <button class="secondary-button" disabled>+ One-Off</button>
+          <button id="add-one-off" class="secondary-button">+ One-Off</button>
 
           <button id="open-seed-bank" class="primary-button">
             🌱 Seed Bank

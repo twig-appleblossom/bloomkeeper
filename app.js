@@ -37,6 +37,15 @@ const seedList = document.querySelector("#seed-list");
 const openSeedBankButton = document.querySelector("#open-seed-bank");
 
 const backToTodayButton = document.querySelector("#back-to-today");
+const addOneOffButton = document.querySelector("#add-one-off");
+
+const oneOffForm = document.querySelector("#one-off-form");
+
+const oneOffInput = document.querySelector("#one-off-input");
+
+const saveOneOffButton = document.querySelector("#save-one-off");
+
+const cancelOneOffButton = document.querySelector("#cancel-one-off");
 
 // -----------------------------
 // SCREEN NAVIGATION
@@ -80,6 +89,44 @@ function addSeedToToday(seedId) {
 }
 
 // -----------------------------
+// ONE-OFFS
+// -----------------------------
+
+addOneOffButton.addEventListener("click", () => {
+  oneOffForm.classList.remove("hidden");
+
+  oneOffInput.focus();
+});
+
+cancelOneOffButton.addEventListener("click", () => {
+  oneOffInput.value = "";
+
+  oneOffForm.classList.add("hidden");
+});
+
+saveOneOffButton.addEventListener("click", () => {
+  const title = oneOffInput.value.trim();
+
+  if (title === "") {
+    return;
+  }
+
+  const newOneOff = {
+    id: crypto.randomUUID(),
+    type: "oneoff",
+    title: title,
+  };
+
+  todayItems.push(newOneOff);
+
+  oneOffInput.value = "";
+
+  oneOffForm.classList.add("hidden");
+
+  renderToday();
+});
+
+// -----------------------------
 // RENDER TODAY
 // -----------------------------
 
@@ -103,16 +150,23 @@ function renderToday() {
   }
 
   todayItems.forEach((item) => {
-    const seed = seeds.find((seed) => seed.id === item.seedId);
-
-    if (!seed) {
-      return;
-    }
-
     const card = document.createElement("div");
 
     card.className = "today-item";
-    card.textContent = seed.title;
+
+    if (item.type === "seed") {
+      const seed = seeds.find((seed) => seed.id === item.seedId);
+
+      if (!seed) {
+        return;
+      }
+
+      card.textContent = seed.title;
+    }
+
+    if (item.type === "oneoff") {
+      card.textContent = `📌 ${item.title}`;
+    }
 
     todayList.appendChild(card);
   });
