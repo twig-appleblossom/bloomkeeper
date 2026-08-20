@@ -1,0 +1,165 @@
+// 🌱 Permanent Seed Bank
+//
+// These Seeds are the permanent originals.
+// Adding one to Today must never remove or change it.
+
+const seeds = [
+  {
+    id: "draw-5",
+    title: "🎨 Draw for 5 minutes",
+  },
+  {
+    id: "eyeliner",
+    title: "🌸 Practice eyeliner",
+  },
+  {
+    id: "pilates-10",
+    title: "🌿 Pilates for 10 minutes",
+  },
+];
+
+// ☀️ Today's Path
+//
+// These are separate occurrences chosen from the Seed Bank.
+
+let todayItems = [];
+
+// -----------------------------
+// ELEMENTS
+// -----------------------------
+
+const todayScreen = document.querySelector("#today-screen");
+const seedBankScreen = document.querySelector("#seed-bank-screen");
+
+const todayList = document.querySelector("#today-list");
+const seedList = document.querySelector("#seed-list");
+
+const openSeedBankButton = document.querySelector("#open-seed-bank");
+
+const backToTodayButton = document.querySelector("#back-to-today");
+
+// -----------------------------
+// SCREEN NAVIGATION
+// -----------------------------
+
+openSeedBankButton.addEventListener("click", () => {
+  todayScreen.classList.add("hidden");
+  seedBankScreen.classList.remove("hidden");
+
+  renderSeedBank();
+});
+
+backToTodayButton.addEventListener("click", () => {
+  seedBankScreen.classList.add("hidden");
+  todayScreen.classList.remove("hidden");
+
+  renderToday();
+});
+
+// -----------------------------
+// ADD A SEED TO TODAY
+// -----------------------------
+
+function addSeedToToday(seedId) {
+  // Don't add the same Seed twice on the same day.
+  const alreadyAdded = todayItems.some((item) => item.seedId === seedId);
+
+  if (alreadyAdded) {
+    return;
+  }
+
+  const newTodayItem = {
+    id: crypto.randomUUID(),
+    type: "seed",
+    seedId: seedId,
+  };
+
+  todayItems.push(newTodayItem);
+
+  renderSeedBank();
+}
+
+// -----------------------------
+// RENDER TODAY
+// -----------------------------
+
+function renderToday() {
+  todayList.innerHTML = "";
+
+  if (todayItems.length === 0) {
+    const emptyMessage = document.createElement("div");
+
+    emptyMessage.className = "empty-state";
+
+    emptyMessage.innerHTML = `
+      Nothing chosen yet 🌱
+      <br><br>
+      What would make today a little nicer?
+    `;
+
+    todayList.appendChild(emptyMessage);
+
+    return;
+  }
+
+  todayItems.forEach((item) => {
+    const seed = seeds.find((seed) => seed.id === item.seedId);
+
+    if (!seed) {
+      return;
+    }
+
+    const card = document.createElement("div");
+
+    card.className = "today-item";
+    card.textContent = seed.title;
+
+    todayList.appendChild(card);
+  });
+}
+
+// -----------------------------
+// RENDER SEED BANK
+// -----------------------------
+
+function renderSeedBank() {
+  seedList.innerHTML = "";
+
+  seeds.forEach((seed) => {
+    const row = document.createElement("div");
+
+    row.className = "seed";
+
+    const title = document.createElement("span");
+
+    title.className = "seed-title";
+    title.textContent = seed.title;
+
+    const addButton = document.createElement("button");
+
+    addButton.className = "seed-add";
+    addButton.textContent = "+";
+
+    const alreadyAdded = todayItems.some((item) => item.seedId === seed.id);
+
+    if (alreadyAdded) {
+      addButton.textContent = "✓";
+      addButton.disabled = true;
+    }
+
+    addButton.addEventListener("click", () => {
+      addSeedToToday(seed.id);
+    });
+
+    row.appendChild(title);
+    row.appendChild(addButton);
+
+    seedList.appendChild(row);
+  });
+}
+
+// -----------------------------
+// START BLOOMKEEPER
+// -----------------------------
+
+renderToday();

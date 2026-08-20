@@ -3,327 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+
     <title>Bloomkeeper</title>
+
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <main class="cottage">
-      <h1>🌸 Bloomkeeper</h1>
+    <main class="app">
+      <!-- TODAY SCREEN -->
+      <section id="today-screen">
+        <header>
+          <p class="eyebrow">🌸 Bloomkeeper</p>
+          <h1>☀️ Today</h1>
+        </header>
 
-      <p class="welcome">
-        Welcome home, Bloomkeeper.<br />
-        Your garden is waiting.
-      </p>
-
-      <nav class="app-navigation" aria-label="Bloomkeeper navigation">
-        <button id="open-journey-log-button" class="nav-button" type="button">
-          📖 Journey Log
-        </button>
-
-        <button
-          id="back-to-cottage-button"
-          class="nav-button hidden"
-          type="button"
-        >
-          🏡 Back to Cottage
-        </button>
-      </nav>
-
-      <section class="player-status" aria-label="Player status">
-        <span id="level-display">Level 1</span>
-        <span id="xp-display">0 / 100 XP</span>
-        <span id="bloom-count-display">0 Blooms</span>
-      </section>
-
-      <div id="cottage-view">
-        <section class="check-in">
-          <h2>🌤 How is your energy?</h2>
-
-          <div class="button-grid">
-            <button class="choice-button" data-energy="low">🌱 Low</button>
-
-            <button class="choice-button" data-energy="medium">
-              🌿 Medium
-            </button>
-
-            <button class="choice-button" data-energy="high">🌳 High</button>
-          </div>
-
-          <h2>🌸 How is your mood?</h2>
-
-          <div class="button-grid">
-            <button class="choice-button" data-mood="good">😊 Good</button>
-
-            <button class="choice-button" data-mood="okay">😐 Okay</button>
-
-            <button class="choice-button" data-mood="difficult">
-              🌧 Difficult
-            </button>
-          </div>
-        </section>
-
-        <section class="gardens">
-          <h2>🌿 What would you like to nurture?</h2>
-
-          <p id="garden-hint" class="hint">
-            Choose one to three Gardens. Your first choice becomes your Primary
-            Garden.
-          </p>
-
-          <div class="garden-grid">
-            <button
-              class="choice-button"
-              data-garden="grace"
-              aria-pressed="false"
-            >
-              🌸 Grace
-            </button>
-
-            <button
-              class="choice-button"
-              data-garden="creativity"
-              aria-pressed="false"
-            >
-              🎨 Creativity
-            </button>
-
-            <button
-              class="choice-button"
-              data-garden="body"
-              aria-pressed="false"
-            >
-              🌿 Body
-            </button>
-
-            <button
-              class="choice-button"
-              data-garden="friendship"
-              aria-pressed="false"
-            >
-              💜 Friendship
-            </button>
-
-            <button
-              class="choice-button"
-              data-garden="sanctuary"
-              aria-pressed="false"
-            >
-              🏡 Sanctuary
-            </button>
-
-            <button
-              class="choice-button"
-              data-garden="curiosity"
-              aria-pressed="false"
-            >
-              ✨ Curiosity
-            </button>
-          </div>
-        </section>
-
-        <button id="continue-button" class="primary-button" disabled>
-          Discover Today's Seeds
-        </button>
-
-        <section id="result" class="result hidden">
-          <p class="result-label">Today's Path</p>
-
-          <div id="primary-seed"></div>
-
-          <div id="companion-seeds" class="companion-seeds"></div>
-
-          <section class="custom-seed-area">
-            <button
-              id="open-custom-seed-button"
-              class="secondary-button"
-              type="button"
-            >
-              ✍️ Write My Own Seed
-            </button>
-
-            <form id="custom-seed-form" class="custom-seed-panel hidden">
-              <h2>🌱 Plant Your Own Seed</h2>
-
-              <label class="form-field">
-                <span>What would you like to do?</span>
-
-                <input
-                  id="custom-seed-text"
-                  type="text"
-                  maxlength="160"
-                  placeholder="For example: Fold the clean laundry"
-                  required
-                />
-              </label>
-
-              <label class="form-field">
-                <span>Which Garden does it belong to?</span>
-
-                <select id="custom-seed-garden">
-                  <option value="grace">🌸 Grace</option>
-                  <option value="creativity">🎨 Creativity</option>
-                  <option value="body">🌿 Body</option>
-                  <option value="friendship">💜 Friendship</option>
-                  <option value="sanctuary">🏡 Sanctuary</option>
-                  <option value="curiosity">✨ Curiosity</option>
-                </select>
-              </label>
-
-              <label class="form-field">
-                <span>How large is this Seed?</span>
-
-                <select id="custom-seed-size">
-                  <option value="tiny">🌱 Tiny · 5 XP</option>
-                  <option value="regular">🌿 Regular · 10 XP</option>
-                  <option value="larger">🌳 Larger · 20 XP</option>
-                </select>
-              </label>
-
-              <div class="seed-actions">
-                <button class="seed-action-button" type="submit">
-                  Add Seed
-                </button>
-
-                <button
-                  id="cancel-custom-seed-button"
-                  class="seed-action-button quiet-button"
-                  type="button"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </section>
-
-          <section id="bloom-log" class="bloom-log hidden">
-            <p class="result-label">Today's Blooms</p>
-            <ul id="bloom-list"></ul>
-          </section>
-
-          <p id="narrator-text"></p>
-
-          <button
-            id="open-save-point-button"
-            class="secondary-button"
-            type="button"
-          >
-            🌙 Visit Save Point
-          </button>
-
-          <section id="save-point-area" class="save-point-area">
-            <form id="save-point-form" class="save-point-panel hidden">
-              <h2>🌙 Save Point</h2>
-
-              <p class="save-point-intro">
-                The day does not need to have been perfect to be worth
-                remembering.
-              </p>
-
-              <label class="form-field">
-                <span>⭐ What Loot did you find today?</span>
-
-                <input
-                  id="loot-text"
-                  type="text"
-                  maxlength="200"
-                  placeholder="Something good, comforting, funny, or beautiful"
-                  required
-                />
-              </label>
-
-              <label class="form-field">
-                <span>🌼 Was there a Bloom Moment?</span>
-
-                <textarea
-                  id="bloom-moment-text"
-                  maxlength="300"
-                  placeholder="A moment that felt a little more like becoming yourself"
-                ></textarea>
-              </label>
-
-              <label class="form-field">
-                <span>📖 One sentence about the day</span>
-
-                <textarea
-                  id="day-note-text"
-                  maxlength="300"
-                  placeholder="How did today feel?"
-                ></textarea>
-              </label>
-
-              <label class="form-field">
-                <span>🌱 What might make tomorrow easier?</span>
-
-                <input
-                  id="tomorrow-ease-text"
-                  type="text"
-                  maxlength="200"
-                  placeholder="For example: leave the yoga mat out"
-                />
-              </label>
-
-              <div class="seed-actions">
-                <button class="seed-action-button" type="submit">
-                  Save the Day
-                </button>
-
-                <button
-                  id="cancel-save-point-button"
-                  class="seed-action-button quiet-button"
-                  type="button"
-                >
-                  Not Yet
-                </button>
-              </div>
-            </form>
-
-            <section
-              id="save-point-summary"
-              class="save-point-summary hidden"
-              aria-live="polite"
-            >
-              <p class="result-label">Day Saved</p>
-
-              <div id="save-point-summary-content"></div>
-            </section>
-          </section>
-
-          <button
-            id="new-day-button"
-            class="secondary-button hidden"
-            type="button"
-          >
-            Begin a New Day
-          </button>
-        </section>
-      </div>
-      <section
-        id="journey-log-view"
-        class="journey-log-view hidden"
-        aria-labelledby="journey-log-title"
-      >
-        <h2 id="journey-log-title">📖 Journey Log</h2>
-
-        <p class="journey-log-intro">
-          A quiet record of the paths you have walked. There are no missed days
-          here—only days you chose to remember.
-        </p>
-
-        <section class="journey-summary" aria-label="Journey summary">
-          <span id="days-saved-display">0 Days Saved</span>
-          <span id="journey-xp-display">0 XP Earned</span>
-        </section>
-
-        <div id="journey-empty-state" class="journey-empty-state hidden">
-          <p>🌱 No days have been saved yet.</p>
-
-          <p>Your first entry will appear here after you visit a Save Point.</p>
+        <div id="today-list" class="today-list">
+          <!-- JavaScript will put today's Seeds here -->
         </div>
 
-        <div id="journey-log-list" class="journey-log-list"></div>
+        <div class="actions">
+          <button class="secondary-button" disabled>+ One-Off</button>
+
+          <button id="open-seed-bank" class="primary-button">
+            🌱 Seed Bank
+          </button>
+        </div>
+      </section>
+
+      <!-- SEED BANK SCREEN -->
+      <section id="seed-bank-screen" class="hidden">
+        <header>
+          <p class="eyebrow">🌱 Bloomkeeper</p>
+          <h1>Seed Bank</h1>
+          <p class="subtitle">
+            Choose something you'd like to bring into today.
+          </p>
+        </header>
+
+        <div id="seed-list" class="seed-list">
+          <!-- JavaScript will put Seeds here -->
+        </div>
+
+        <button id="back-to-today" class="secondary-button">
+          ← Back to Today
+        </button>
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <script src="app.js" defer></script>
   </body>
 </html>
