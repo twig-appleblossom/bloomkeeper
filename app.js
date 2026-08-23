@@ -24,6 +24,38 @@ const seeds = [
 
 let todayItems = [];
 
+function getTodayDate() {
+  return new Date().toLocaleDateString("en-CA");
+}
+
+// -----------------------------
+// LOCAL STORAGE
+// -----------------------------
+
+function saveToday() {
+  const data = {
+    date: getTodayDate(),
+    items: todayItems,
+  };
+
+  localStorage.setItem("bloomkeeper-today", JSON.stringify(data));
+}
+
+function loadToday() {
+  const savedData = localStorage.getItem("bloomkeeper-today");
+
+  if (!savedData) {
+    return;
+  }
+
+  const data = JSON.parse(savedData);
+
+  // Only restore the plan if it belongs to today.
+  if (data.date === getTodayDate()) {
+    todayItems = data.items;
+  }
+}
+
 // -----------------------------
 // ELEMENTS
 // -----------------------------
@@ -85,6 +117,8 @@ function addSeedToToday(seedId) {
 
   todayItems.push(newTodayItem);
 
+  saveToday();
+
   renderSeedBank();
 }
 
@@ -119,6 +153,8 @@ saveOneOffButton.addEventListener("click", () => {
 
   todayItems.push(newOneOff);
 
+  saveToday();
+
   oneOffInput.value = "";
 
   oneOffForm.classList.add("hidden");
@@ -132,6 +168,8 @@ saveOneOffButton.addEventListener("click", () => {
 
 function completeTodayItem(itemId) {
   todayItems = todayItems.filter((item) => item.id !== itemId);
+
+  saveToday();
 
   renderToday();
 }
@@ -241,5 +279,5 @@ function renderSeedBank() {
 // -----------------------------
 // START BLOOMKEEPER
 // -----------------------------
-
+loadToday();
 renderToday();
