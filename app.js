@@ -3,7 +3,7 @@
 // These Seeds are the permanent originals.
 // Adding one to Today must never remove or change it.
 
-const seeds = [
+const defaultSeeds = [
   {
     id: "draw-5",
     title: "🎨 Draw for 5 minutes",
@@ -18,6 +18,10 @@ const seeds = [
   },
 ];
 
+let seeds = [];
+
+let editingSeedId = null;
+
 // ☀️ Today's Path
 //
 // These are separate occurrences chosen from the Seed Bank.
@@ -31,6 +35,23 @@ function getTodayDate() {
 // -----------------------------
 // LOCAL STORAGE
 // -----------------------------
+
+function saveSeeds() {
+  localStorage.setItem("bloomkeeper-seeds", JSON.stringify(seeds));
+}
+
+function loadSeeds() {
+  const savedSeeds = localStorage.getItem("bloomkeeper-seeds");
+
+  if (savedSeeds) {
+    seeds = JSON.parse(savedSeeds);
+    return;
+  }
+
+  seeds = defaultSeeds.map((seed) => ({ ...seed }));
+
+  saveSeeds();
+}
 
 function saveToday() {
   const data = {
@@ -78,6 +99,16 @@ const oneOffInput = document.querySelector("#one-off-input");
 const saveOneOffButton = document.querySelector("#save-one-off");
 
 const cancelOneOffButton = document.querySelector("#cancel-one-off");
+
+const openSeedFormButton = document.querySelector("#open-seed-form");
+
+const seedForm = document.querySelector("#seed-form");
+
+const seedInput = document.querySelector("#seed-input");
+
+const saveSeedButton = document.querySelector("#save-seed");
+
+const cancelSeedButton = document.querySelector("#cancel-seed");
 
 // -----------------------------
 // SCREEN NAVIGATION
@@ -237,6 +268,79 @@ function renderToday() {
 }
 
 // -----------------------------
+// MANAGE SEEDS
+// -----------------------------
+
+function openSeedForm(seed = null) {
+  seedForm.classList.remove("hidden");
+
+  if (seed) {
+    editingSeedId = seed.id;
+
+    seedInput.value = seed.title;
+
+    saveSeedButton.textContent = "Save Changes";
+  } else {
+    editingSeedId = null;
+
+    seedInput.value = "";
+
+    saveSeedButton.textContent = "Add Seed";
+  }
+
+  seedInput.focus();
+}
+
+function closeSeedForm() {
+  editingSeedId = null;
+
+  seedInput.value = "";
+
+  seedForm.classList.add("hidden");
+
+  saveSeedButton.textContent = "Add Seed";
+}
+
+openSeedFormButton.addEventListener("click", () => {
+  openSeedForm();
+});
+
+cancelSeedButton.addEventListener("click", () => {
+  closeSeedForm();
+});
+
+saveSeedButton.addEventListener("click", () => {
+  const title = seedInput.value.trim();
+
+  if (title === "") {
+    return;
+  }
+
+  // Editing an existing Seed
+  if (editingSeedId) {
+    const seed = seeds.find((seed) => seed.id === editingSeedId);
+
+    if (seed) {
+      seed.title = title;
+    }
+  } else {
+    // Creating a brand-new Seed
+    const newSeed = {
+      id: crypto.randomUUID(),
+      title: title,
+    };
+
+    seeds.push(newSeed);
+  }
+
+  saveSeeds();
+
+  closeSeedForm();
+
+  renderSeedBank();
+});
+
+// -----------------------------
 // RENDER SEED BANK
 // -----------------------------
 
@@ -269,8 +373,52 @@ function renderSeedBank() {
       addSeedToToday(seed.id);
     });
 
+    const editButton = document.createElement("button");
+
+    editButton.className = "seed-edit";
+    editButton.textContent = "✏️";
+
+    editButton.addEventListener("click", () => {
+      openSeedForm(seed);
+    });
+
+    const deleteButton = document.createElement("button");
+
+    deleteButton.className = "seed-delete";
+    deleteButton.textContent = "🗑️";
+
+    deleteButton.addEventListener("click", () => {
+      const shouldDelete = window.confirm(
+        `Remove "${seed.title}" from the Seed Bank?`,
+      );
+
+      if (!shouldDelete) {
+        return;
+      }
+
+      // Remove the permanent Seed.
+      seeds = seeds.filter((existingSeed) => existingSeed.id !== seed.id);
+
+      // If today's plan contains this Seed,
+      // remove today's occurrence too.
+      todayItems = todayItems.filter((item) => item.seedId !== seed.id);
+
+      saveSeeds();
+      saveToday();
+
+      renderSeedBank();
+    });
+
+    const actions = document.createElement("div");
+
+    actions.className = "seed-row-actions";
+
+    actions.appendChild(addButton);
+    actions.appendChild(editButton);
+    actions.appendChild(deleteButton);
+
     row.appendChild(title);
-    row.appendChild(addButton);
+    row.appendChild(actions);
 
     seedList.appendChild(row);
   });
@@ -279,5 +427,7 @@ function renderSeedBank() {
 // -----------------------------
 // START BLOOMKEEPER
 // -----------------------------
+loadSeeds();
 loadToday();
+
 renderToday();

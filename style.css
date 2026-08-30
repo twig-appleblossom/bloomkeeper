@@ -169,6 +169,71 @@ h1 {
   cursor: default;
 }
 
+/* SEED FORM */
+
+.seed-form {
+  margin-top: 16px;
+  margin-bottom: 20px;
+
+  padding: 18px;
+
+  background: white;
+  border-radius: 18px;
+
+  box-shadow: 0 2px 8px rgba(60, 40, 70, 0.06);
+}
+
+.seed-form label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-weight: 600;
+}
+
+.seed-form input {
+  width: 100%;
+
+  padding: 14px;
+
+  border: 1px solid #ded4e1;
+  border-radius: 12px;
+
+  font: inherit;
+}
+
+.seed-form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  margin-top: 12px;
+}
+
+.seed-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seed-edit,
+.seed-delete {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f1ebf2;
+  color: #625667;
+
+  cursor: pointer;
+}
+
+.seed-delete {
+  background: #f5eaea;
+}
+
 /* BUTTONS */
 
 .actions {

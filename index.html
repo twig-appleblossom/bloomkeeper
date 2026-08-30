@@ -59,6 +59,24 @@
           <!-- JavaScript will put Seeds here -->
         </div>
 
+        <button id="open-seed-form" class="primary-button">+ Add Seed</button>
+
+        <div id="seed-form" class="seed-form hidden">
+          <label for="seed-input"> Seed name </label>
+
+          <input
+            id="seed-input"
+            type="text"
+            placeholder="🌸 Practice something..."
+          />
+
+          <div class="seed-form-actions">
+            <button id="cancel-seed" class="secondary-button">Cancel</button>
+
+            <button id="save-seed" class="primary-button">Add Seed</button>
+          </div>
+        </div>
+
         <button id="back-to-today" class="secondary-button">
           ← Back to Today
         </button>
